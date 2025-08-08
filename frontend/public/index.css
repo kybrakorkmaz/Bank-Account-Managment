@@ -1,0 +1,645 @@
+/* Sayfa ve yazı sıfırlama */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow-x: hidden;
+}
+a {
+    text-decoration: none;
+}
+.cfb{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+/* Home Page CSS Properties */
+.navbar{
+    background-color: #131e37;
+    border: 0.2em solid #0e162b;
+    font-size: 1.3em;
+}
+.endNavbar{
+    gap: 0.5rem;
+}
+.navbar-nav .navButton{
+    background-color: #A52A2AFF !important;
+    border-radius: 0.5rem !important;
+    color: white !important;
+}
+.navbar-nav .navButton:hover{
+    background-color: #d84040 !important;
+}
+@media (max-width: 600px) {
+    .navbar-collapse {
+        text-align: center;
+    }
+
+    .navbar-nav {
+        align-items: center;
+    }
+
+    .navbar-nav .nav-item {
+        width: 100%;
+    }
+}
+.carousel-wrapper{
+    /*todo button style*/
+    width: clamp(300px, 70vw, 1000px);
+    aspect-ratio: 1 / 0.5; /* 16:9 aspect ratio */
+    overflow: hidden; /* taşmaları engeller */
+    border-radius: 1rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    margin: 5% auto; /* ortalamak için */
+}
+#CarouselHomePage{
+    border-radius: 0.5em; /* Opsiyonel */
+}
+.carousel-item {
+    height: 0;
+    padding-bottom: 50%; /* 16:9 aspect ratio */
+}
+.carousel-inner img {
+    width: 100%;
+    object-fit: cover; /* Resimlerin kapsayıcıyı doldurmasını sağlar */
+}
+.carousel-caption{
+    /*todo headline font size and weight*/
+    color: #ffffff !important;
+    font-size: 1.5rem;
+    font-weight: normal;
+    text-align: center;
+    text-shadow:2px 2px 3px rgba(0, 0, 0, 0.85);
+}
+.intro{
+    display: block;
+    text-align: justify;
+    font-size: 1.1em;
+    padding: 0 10%;
+}
+.card-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Kartları yatayda ortalar */
+    margin: 5% 10%; /* Kart grubu için üst ve alt boşluk */
+}
+.card{
+    padding: 0 2%;
+
+}
+.card-body ul{
+    list-style-type: none;
+}
+.footer {
+    background-color: #0a0a23;
+    color: white;
+    padding: 2rem 1rem;
+}
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+@media (max-width: 768px) {
+    .footer-container {
+        width: 100%;
+        padding: 0 0;
+    }
+}
+/* Company details section */
+.footer-company-details {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+.footer-icons ul {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    padding: 0;
+    list-style: none;
+}
+.footer-container .footer-icons a {
+    font-size: 1.5rem;
+    color: white;
+    transition: color 0.3s ease;
+}
+.footer-container .footer-icons a:hover {
+    color: #00bcd4;
+}
+/* Footer navbar grid */
+.footer-navbar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+.footer-navbar h5 {
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    color: #ffffff;
+}
+.footer-navbar ul {
+    list-style: none;
+    padding: 0;
+}
+.footer-navbar li a {
+    color: #cccccc;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    font-size: 0.95rem;
+}
+.footer-navbar li a:hover {
+    color: #ffffff;
+}
+/* Copyright */
+.footer-copyright {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 1rem;
+    text-align: center;
+    font-size: 0.875rem;
+    color: #aaa;
+}
+/* Responsive spacing */
+@media (min-width: 768px) {
+    .footer-company-details {
+        flex-direction: row;
+        text-align: left;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .footer-content {
+        flex: 1;
+        padding: 0 1rem;
+    }
+}
+/* Login Page CSS Properties */
+.login-page-container{
+    padding: 10% 25%;
+}
+.login-form{
+    display: block;
+    text-align: center;
+    max-width: 400px;
+    width: 100%;
+}
+.login-input{
+    padding: 4%;
+}
+.login-form label{
+    display: block;
+    margin-top: 2%;
+}
+/* input özellikleri tekrarlı */
+.login-input input {
+    height: 2rem;
+    width: 100%;
+    max-width: 300px;
+    border-radius: 0.5em;
+    box-shadow: 1px 2px 2px #131e37;
+    border: 0.1em solid #0e162b;
+
+}
+/* buton özellikleri tekrarlı*/
+.login-form-button{
+    max-width: 175px;
+    width: 100%;
+    background-color: rgb(32, 53, 103);
+    box-shadow: 1px 2px 2px #131e37;
+    border: 0.1em solid #0e162b;
+    border-radius: 0.5em;
+    height: 2em;
+    color: #ffffff;
+
+}
+.login-form-button:hover{
+    background-color: rgb(41, 68, 133);
+}
+.login-form-button:focus{
+    background-color: #0e162b;
+}
+/* Profile Page CSS*/
+/* Balance Component */
+.balance-container{
+    display: flex;
+    flex-wrap:  wrap;
+    width:  100%;
+}
+.balance-container form{
+    width: 20rem;
+    margin: 10% auto;
+
+}
+.balance-container form label{
+    display: block;
+}
+.balance-container input{
+    width: 100%;
+    max-width: 300px;
+    box-shadow: 1px 2px 2px #131e37;
+    border: 0.1em solid #0e162b;
+    border-radius: 0.5em;
+    height: 2em;
+}
+/* Account Container */
+
+.account-container{
+    display: flex;
+    width: 100%;
+}
+.account-gp-design{
+    width: inherit;
+}
+.account-gp-design .account-button, .back-button button{
+    display: block;
+    width: inherit;
+    text-align: left;
+    border: none;
+    background-color:  #fff;
+    padding: 0.5rem 0.5rem;
+    height: 3rem;
+}
+.account-gp-design .account-button:hover{
+    background-color: #212d51;
+    color: #fff;
+}
+.account-gp-design .back-button{
+    display: flex;
+    justify-content: flex-end;
+    border: none;
+    background-color:  #fff;
+}
+/* Show Account*/
+.show-account .account-info{
+    padding: 2rem;
+}
+    /* Create Account Design*/
+.dropdown-container{
+    padding: 2% 20%;
+}
+.dropdown-container-item{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+.create-account-container .dropdown-label{
+    width: 10rem;
+    display: flex;
+    justify-content: left;
+}
+.create-account-container .dropdown-label label{
+    text-align: left;
+}
+.create-account-container .dropdown {
+    width: inherit;
+}
+.create-account-container .dropdown a{
+    color: black !important;
+}
+.confirm-button button{
+    width:4rem;
+    display: flex;
+    justify-content: center;
+    margin: 2% auto;
+    border: 1px solid #0e162b !important;
+    background-color: rgb(32, 53, 103);
+    box-shadow: 1px 2px 2px #131e37;
+    border-radius: 0.5em;
+    color:#fff;
+
+}
+.confirm-button button:hover{
+    background-color: rgb(41, 68, 133);
+}
+
+/* Transfer Design */
+.transfer-form-wrapper {
+    width: 100%;
+    padding: 2% 10%;
+    display: flex;
+    justify-content: center; /* ortalama */
+}
+.transfer-form {
+    width: 100%;
+    box-sizing: border-box;
+    margin: auto 30%;
+}
+.transfer-form-item{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+.transfer-form-item input {
+    width: 8rem;
+    box-sizing: border-box;
+    border-radius: 0.5em;
+    height: 2em;
+    border: 0.1em solid #0e162b;
+    box-shadow: 1px 2px 2px #131e37;
+}
+@media (max-width: 600px) {
+    .transfer-form-wrapper {
+        padding: 2% 5%;
+    }
+
+    .transfer-form {
+        margin: 0;
+        padding: 0;
+    }
+
+    .transfer-form-item {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .transfer-form-item input {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box;
+    }
+
+    .transfer-form-item label {
+        margin-bottom: 0.5rem;
+    }
+}
+
+/* Settings Design*/
+.form-group-container{
+    width: 100%;
+    padding: 2% 15%;
+    display: flex;
+    justify-content: center; /* ortalama */
+}
+.form-group{
+
+}
+.form-item{
+    display: flex;
+    justify-content: space-between;
+    margin: 1rem;
+}
+.form-item input{
+    border: 0.1em solid #0e162b;
+    box-shadow: 1px 2px 2px #131e37;
+    box-sizing: border-box;
+    border-radius: 0.5em;
+    height: 2em;
+}
+/*Address Section Design*/
+.address-section{
+    width: 100%;
+}
+.address-section-button-group{
+    display: flex;
+    justify-content: flex-end;
+    margin: 1rem;
+}
+.address-section-button-group button{
+    margin: 0.2rem;
+    width: 5rem;
+    height: 2rem;
+    border-radius: 0.5em;
+    background-color: #A52A2AFF;
+    color: white;
+    border: none;
+}
+
+.address-section-button-group button:hover{
+    background-color: #d84040;
+}
+.address-section .address-item{
+    width: 100%;
+}
+.address-section .address-item-label-group label{
+    margin: 1%;
+}
+.address-section .address-item .address-item-input{
+    margin: 1%;
+    display: flex;
+}
+.address-section .address-item .address-item-input input{
+    width: 100%;
+}
+.address-wrapper{
+    width: 100%;
+}
+.address-wrapper .back-button{
+    display: flex;
+    justify-content: flex-end;
+}
+.address-wrapper .dropdown-container{
+    margin: 0 auto;
+    width: 100%;
+}
+@media (max-width: 600px) {
+    .add-address-wrapper .dropdown-container{
+        width: 100%;
+        padding: 2% 10%;
+    }
+}
+.address-wrapper .dropdown-container-item input{
+    border: 0.1em solid #0e162b;
+    box-shadow: 1px 2px 2px #131e37;
+    box-sizing: border-box;
+    border-radius: 0.5em;
+    height: 2em;
+}
+.address-wrapper .confirm-button{
+    padding: 2rem;
+}
+.address-wrapper .confirm-button button{
+    width: 8rem;
+    height: 1.5rem;
+}
+@media (max-width: 600px) {
+    .settings-container,
+    .form-group-container,
+    .form-group {
+        width: 100%;
+        padding: 0 5%;
+        box-sizing: border-box;
+    }
+
+    .form-item {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        margin-bottom: 1rem;
+    }
+
+    .form-item label {
+        margin-bottom: 0.5rem;
+        font-size: 0.95rem;
+    }
+
+    .form-item input[type="text"],
+    .form-item input[type="mail"],
+    .form-item input[type="password"],
+    .form-item input[type="checkbox"] {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box;
+    }
+
+    .input-icon-group {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .input-icon-group input {
+        flex: 1;
+    }
+
+    .input-icon-group span {
+        font-size: 1.2rem;
+        cursor: pointer;
+    }
+
+    .confirm-button {
+        padding: 1rem 0;
+        display: flex;
+        justify-content: center;
+    }
+
+    .confirm-button button {
+        width: 100%;
+        max-width: 300px;
+    }
+}
+@media (max-width: 600px) {
+    /* Ana container'lar */
+    .address-section,
+    .address-wrapper,
+    .dropdown-container {
+        width: 100%;
+        padding: 0 5%;
+        box-sizing: border-box;
+    }
+
+    /* Geri butonu hizalama */
+    .back-button {
+        justify-content: flex-start !important;
+        padding: 0.5rem 0;
+    }
+
+    /* Buton grubu dikey hizalama */
+    .address-section-button-group {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.5rem;
+    }
+
+    .address-section-button-group button,
+    .confirm-button button {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+    }
+
+    /* Adres kutuları */
+    .address-item {
+        margin-bottom: 1rem;
+        padding: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 0.5rem;
+    }
+
+    .address-item-label-group {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 0.5rem;
+    }
+
+    .address-item-input {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .address-item-input input {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+        border: 1px solid #0e162b;
+    }
+
+    /* Dropdown item'lar dikey hizalanır */
+    .dropdown-container-item {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 1rem;
+    }
+
+    .dropdown-label {
+        margin-bottom: 0.5rem;
+    }
+
+    .dropdown {
+        width: 100% !important;
+    }
+
+    .dropdown a {
+        display: block;
+        width: 100%;
+        padding: 0.5rem;
+        box-sizing: border-box;
+        background-color: #f5f5f5;
+        border-radius: 0.5em;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    /* Inputlar */
+    .dropdown-container-item input {
+        width: 20%;
+        box-sizing: border-box;
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+        border: 1px solid #0e162b;
+    }
+    .dropdown-container-item input[type="text"] {
+        width: 15%;
+        box-sizing: border-box;
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+        border: 1px solid #0e162b;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    /* Onay butonu hizalama */
+    .confirm-button {
+        display: flex;
+        justify-content: center;
+        padding: 1rem 0;
+    }
+}
+@media (max-width: 450px) {
+    /* Inputlar */
+    .dropdown-container-item input {
+        width: 100%;
+        max-width: 10rem;
+    }
+    .dropdown-container-item input[type="text"] {
+        width: 100%;
+        max-width: 12rem;
+    }
+}
+@media (max-width: 350px) {
+    /* Inputlar */
+    .dropdown-container-item input {
+        width: 100%;
+        max-width: 12rem;
+    }
+    .dropdown-container-item input[type="text"] {
+        width: 100%;
+        max-width: 6rem;
+    }
+}
