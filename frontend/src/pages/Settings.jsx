@@ -27,12 +27,8 @@ function Settings(props) {
             <div className="form-group-container">
                 <form className="form-group">
                     <div className="form-item">
-                        <label>First Name</label>
-                        <input type="text" placeholder="First name" disabled/>
-                    </div>
-                    <div className="form-item">
-                        <label>Surname</label>
-                        <input type="text" placeholder="Surname" disabled/>
+                        <label>ame</label>
+                        <input type="text" disabled/>
                     </div>
                     <div className="form-item">
                         <label>Citizen ID</label>

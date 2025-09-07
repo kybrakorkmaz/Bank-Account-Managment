@@ -6,7 +6,7 @@ function ShowAccount(props) {
 
     return(
         <div className="show-account  account-gp-design">
-            {/* 👇 geri dönüş butonu */}
+            {/* geri dönüş butonu */}
             <div className="back-button">
                 <button onClick={props.onBack}><RollbackOutlined style={{ fontSize: '1.5rem', color: '#08c' }}  /></button>
             </div>

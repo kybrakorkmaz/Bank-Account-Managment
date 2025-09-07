@@ -46,7 +46,7 @@ function AccountList() {
         }
 
     }
-    // 👇 geri dönüş fonksiyonu
+    //return back function
     function handleBack() {
         setAccountClicked(false);
         setIsNewAccount(false);
