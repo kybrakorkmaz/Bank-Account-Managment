@@ -12,6 +12,25 @@ const getAccountID = async (clientIban) =>{
         throw error;
     }
 }
+const getMainAccount = async (email) => {
+    try {
+        const result = await dbClient.query(
+            `SELECT account_id, iban, balance, currency
+             FROM account
+             WHERE client_id = (SELECT client_id FROM client WHERE email = $1)
+               AND account_type = 'deposit'
+             ORDER BY account_id ASC
+                 LIMIT 1`,
+            [email]
+        );
+        return result.rows[0] || null;
+    } catch (error) {
+        console.error("Main account fetch error:", error);
+        throw error;
+    }
+};
+
+
 const getAccountList = async (client)=>{
     try{
         const idResult = await dbClient.query(
@@ -34,37 +53,33 @@ const getAccountList = async (client)=>{
     }
 }
 
-const createAccount = async (client, accountInfo)=>{
-    try{
-        const {accountType, currency, balance} = accountInfo;
-        const createdAt = new Date();
-        const newAccount = new Account(
-            accountType,
-            currency,
-            balance,
-            createdAt,
-            accountStatus.ACTIVE
-        );
+const updateAccountTable = async (email, accountInfo) => {
+    try {
         const dbResult = await dbClient.query(
             `INSERT INTO account (
-                     client_id, account_type,  balance, created_at, account_status, currency)
-            VALUES(
-                   (SELECT client_id FROM client WHERE email = $1),$2, $3, $4, $5, $6)
-                RETURNING *`,
+                client_id, account_type, IBAN, balance, created_at, account_status, currency
+            )
+             VALUES (
+                            (SELECT client_id FROM client WHERE email = $1), $2, $3, $4, $5, $6, $7
+                    )
+                 RETURNING *`,
             [
-                client.email,
-                newAccount.accountType,
-                newAccount.balance,
-                newAccount.createdAt,
-                newAccount.accountStatus,
-                newAccount.currency]
+                email,
+                accountInfo.accountType,
+                accountInfo.iban,
+                accountInfo.balance,
+                accountInfo.createdAt,
+                accountInfo.accountStatus,
+                accountInfo.currency
+            ]
         );
         return dbResult.rows[0];
-    }catch(error){
+    } catch (error) {
         console.error("Account creation error:", error);
         throw error;
     }
-}
+};
+
 
 const deleteAccount = async (accountId) => {
     try {
@@ -82,4 +97,4 @@ const deleteAccount = async (accountId) => {
     }
 };
 
-export {getAccountID, getAccountList, createAccount, deleteAccount};
+export {getAccountID, getAccountList, updateAccountTable, deleteAccount, getMainAccount};

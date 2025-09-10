@@ -1,5 +1,6 @@
 import express from "express";
 import session from "express-session";
+import cors from "cors";
 
 import dbClient from "./config/databaseConfig.js";
 import clientRouter from "./routes/clientRouter.js";
@@ -9,7 +10,11 @@ import accountActionRouter from "./routes/accountActionRouter.js";
 import settingsRouter from "./routes/settingsRouter.js";
 
 const port = 3000;
-const app = express(); // 🔧 express.use() değil, express()
+const app = express();
+app.use(cors({
+    origin: "http://localhost:5173", //frontend address
+    credentials: true
+}));
 
 // middleware to read json body
 app.use(express.json());
