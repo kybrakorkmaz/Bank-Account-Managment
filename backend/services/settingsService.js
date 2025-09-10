@@ -1,25 +1,34 @@
 // settingsService.js
 import bcrypt from "bcrypt";
-import {getClientInfoByID} from "../repositories/clientRepository.js";
+import {getClientInfoByID, updateClientInfoByID} from "../repositories/clientRepository.js";
 
 
 const getSettings = async (clientId) => {
     return await getClientInfoByID(clientId);
 };
 
-const updateSettings = async (clientId, { email, phone, password, confirmPassword }) => {
-    if (password && password !== confirmPassword) {
-        throw new Error("Passwords do not match");
+
+const updateSettings = async (clientId, clientInfo) => {
+    const email = clientInfo.email || null;
+    const phone = clientInfo.phone || null;
+    const password = clientInfo.password || null;
+    const confirmPassword = clientInfo.confirmPassword || null;
+
+    if (password !== null || confirmPassword !== null) {
+        if (!password || !confirmPassword) {
+            throw new Error("Both password and confirm password must be filled!");
+        }
+        if (password !== confirmPassword) {
+            throw new Error("Passwords do not match!");
+        }
+        const hashedPassword = await bcrypt.hash(password, 10);
+        return await updateClientInfoByID(clientId, email, phone, hashedPassword);
     }
 
-    const updated = await updateSettings(clientId, email, phone);
-
-    if (password) {
-        const hashed = await bcrypt.hash(password, 10);
-        await updatePasswordRepo(clientId, hashed);
-    }
-
-    return updated;
+    return await updateClientInfoByID(clientId, email, phone, null);
 };
+
+
+
 
 export { getSettings, updateSettings };

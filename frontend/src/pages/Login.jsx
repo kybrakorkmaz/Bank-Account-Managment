@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Alert } from "antd";
-
+import axiosInstance from "../api/axiosInstance.js";
 function Login() {
-    const username = "user";
     const [userEmail, setUserEmail] = useState("");
     const [userPassword, setUserPassword] = useState("");
     const [emptyEmail, setEmptyEmail] = useState(false);
@@ -13,7 +12,7 @@ function Login() {
     const navigate = useNavigate();
     const isValidEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
-    function handleLogin(event) {
+    async function handleLogin(event) {
         event.preventDefault();
         setLoginError(false); // Clear last error
 
@@ -27,10 +26,15 @@ function Login() {
             return;
         }
 
-        if (userEmail === "admin@mail.com" && userPassword === "admin") {
-            navigate("/profile");
-        } else {
-            setLoginError(true);
+        try{
+            const response = await axiosInstance.post("/login", {
+                email: userEmail,
+                password: userPassword
+            });
+            if(response.status === 200) navigate("/profile");
+        }catch (error){
+            if(error.response?.status === 404 || error.response?.status === 401) setLoginError(true);
+            else console.error("Unexpected error", error);
         }
     }
 
@@ -83,7 +87,7 @@ function Login() {
             <div className="login-page-container cfb">
 
                 <form className="login-form">
-                    <label>Welcome {username}</label>
+                    <label>Welcome</label>
                     <div className="login-input">
                         <input
                             onChange={handleChange}

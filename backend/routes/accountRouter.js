@@ -1,6 +1,26 @@
 import express from "express";
-import {createAccount, deleteAccount, getAccountList} from "../repositories/accountRespository.js";
+import { deleteAccount, getAccountList, getMainAccount} from "../repositories/accountRespository.js";
+import {createAccount} from "../services/accountService.js";
 const router = express.Router();
+
+router.get("/accounts/main", async (req, res) => {
+    const clientSession = req.session.client;
+    if (!clientSession?.email) {
+        return res.status(401).json({ message: "Unauthorized: No client session" });
+    }
+
+    try {
+        const mainAccount = await getMainAccount(clientSession.email);
+        if (!mainAccount) {
+            return res.status(404).json({ message: "No deposit account found" });
+        }
+        res.status(200).json(mainAccount);
+    } catch (error) {
+        console.error("Main account endpoint error:", error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+});
+
 
 router.get("/accounts", async (req, res)=>{
     const clientSession = req.session.client;
@@ -30,7 +50,7 @@ router.post("/accounts", async (req, res)=>{
         return res.status(400).json({ message: "Empty Request" });
     }
    try{
-       const newAccount = await createAccount(clientSession, result);
+       const newAccount = await createAccount(clientSession.email, result);
        return res.status(201).json({ message: "Account created", account: newAccount });
    }catch (error){
        console.error("Account creation failed:", error);

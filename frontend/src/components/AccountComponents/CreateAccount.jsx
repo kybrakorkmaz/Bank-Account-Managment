@@ -1,26 +1,28 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import { DownOutlined, RollbackOutlined } from "@ant-design/icons";
 import { Dropdown, Space } from "antd";
+import accountTypeEnum from "../../../../backend/enum/accountTypeEnum.js"
+import currencyTypeEnum from "../../../../backend/enum/currencyTypeEnum.js";
+import axiosInstance from "../../api/axiosInstance.js";
+import { message } from "antd";
 
-// Vadeli / Vadesiz seçenekleri
-const accountTypes = [
-    { label: "Time deposit account", key: "Time deposit account" },
-    { label: "Demand deposit", key: "Demand deposit" }
-];
+const accountTypes = Object.entries(accountTypeEnum).map(([key, value])=>({
+    label: value.charAt(0).toUpperCase() + value.slice(1), //Loan
+    key: value //loan
+}));
 
-// Para birimi seçenekleri
-const currencyTypes = [
-    { label: "Turkish Lira (₺)", key: "TL" },
-    { label: "Dollar ($)", key: "USD" },
-    { label: "Euro (€)", key: "EUR" },
-    { label: "Gold (Gr)", key: "GOLD" }
-];
+const currencyTypes = Object.entries(currencyTypeEnum).map(([key, value])=>({
+    label: value,
+    key: value
+}));
 
-function CreateAccount({ onBack }) {
+
+function CreateAccount({ onBack, onAccountCreated }) {
     const [selectedAccountType, setSelectedAccountType] = useState(null);
     const [selectedCurrency, setSelectedCurrency] = useState(null);
     const [openAccountType, setOpenAccountType] = useState(false);
     const [openCurrency, setOpenCurrency] = useState(false);
+    const [balance, setBalance] = useState("");
 
     const handleAccountTypeClick = (e) => {
         setSelectedAccountType(e.key);
@@ -32,8 +34,37 @@ function CreateAccount({ onBack }) {
         setOpenCurrency(false);
     };
 
-    function handleAccountSave() {
-        console.log("save button clicked!");
+    async function handleAccountSave() {
+        const parsedBalance = parseInt(balance);
+        if (isNaN(parsedBalance) ||parsedBalance < 0) {
+            message.warning("Please enter a valid balance.", 2);
+            return;
+        }
+        if (!selectedAccountType || !selectedCurrency || !balance) {
+            message.warning("Please fill in all fields.", 2); //message || duration
+            return;
+        }
+        const payload = {
+            accountType: selectedAccountType,
+            currency: selectedCurrency,
+            balance: parseFloat(balance)
+        };
+        try {
+            const response = await axiosInstance.post("/accounts", payload);
+            message.success("Account created successfully!", 2);
+            //transfer new account upper component (AccountList Component)
+            const created = response.data.account;
+            created.account_type = payload.accountType;
+            created.currency = payload.currency;
+            created.balance = payload.balance;
+            onAccountCreated(created);
+            // clean form
+            setSelectedAccountType(null);
+            setSelectedCurrency(null);
+            setBalance("");
+        } catch (error) {
+            message.error("Account creation failed.", 2);
+        }
     }
 
     return (
@@ -87,6 +118,15 @@ function CreateAccount({ onBack }) {
                             </a>
                         </Dropdown>
                     </div>
+                </div>
+                <div className="dropdown-container-item">
+                    <label>Balance</label>
+                    <input
+                        type="number"
+                        min={0}
+                        value={balance}
+                        onChange={(e) => setBalance(e.target.value)}
+                    />
                 </div>
 
             </div>

@@ -8,7 +8,7 @@ import {getClientIdByEmail} from "../repositories/clientRepository.js";
 
 const router = express.Router();
 
-router.get("/settings/:id", async (req, res) => {
+router.get("/settings", async (req, res) => {
     const clientSession = req.session.client;
     const clientId = await getClientIdByEmail(clientSession.email);
     try {
@@ -19,16 +19,30 @@ router.get("/settings/:id", async (req, res) => {
     }
 });
 
-router.put("/settings/:id", async (req, res) => {
+router.patch("/settings", async (req, res) => {
     const clientSession = req.session.client;
+    if (!clientSession?.email) {
+        return res.status(401).json({ message: "Unauthorized: No client session" });
+    }
+
     const clientId = await getClientIdByEmail(clientSession.email);
-    const { email, phone, password, confirmPassword } = req.body; //
+    const updateFields = req.body;
+
+    if (!updateFields || Object.keys(updateFields).length === 0) {
+        return res.status(400).json({ message: "Empty update request" });
+    }
+
     try {
-        const updated = await updateSettings(clientId, { email, phone, password, confirmPassword });
-        res.json({ message: "Settings updated", updated });
+        const updatedSettings = await updateSettings(clientId, updateFields);
+        if (!updatedSettings) {
+            return res.status(404).json({ message: "Settings not found or not updated" });
+        }
+        return res.status(200).json({ message: "Settings updated successfully", settings: updatedSettings });
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        console.error("Settings update failed:", error);
+        return res.status(500).json({ message: "Internal Server Error" });
     }
 });
+
 
 export default router;
