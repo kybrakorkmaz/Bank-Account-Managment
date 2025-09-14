@@ -27,7 +27,7 @@ function Settings(props) {
             <div className="form-group-container">
                 <form className="form-group">
                     <div className="form-item">
-                        <label>ame</label>
+                        <label>Name</label>
                         <input type="text" disabled/>
                     </div>
                     <div className="form-item">

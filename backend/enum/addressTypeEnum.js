@@ -1,6 +1,6 @@
 const addressTypeEnum={
-    HOME: "HOME",
-    OFFICE: "OFFICE",
-    OTHER: "OTHER"
+    HOME: "Home",
+    OFFICE: "Office",
+    OTHER: "Other"
 }
 export default addressTypeEnum;

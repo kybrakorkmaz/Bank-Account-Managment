@@ -49,8 +49,8 @@ const updateTransferTable= async (transfer)=>{
                      exchange_fee,
                      transfer_fee ,
                      issued_time)VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`;
-        //console.log("sender iban", transfer.senderIban);
-        //console.log("receiver iban", transfer.receiverIban);
+        console.log("sender iban", transfer.senderIban);
+        console.log("receiver iban", transfer.receiverIban);
         const senderAccountID = await getAccountID(transfer.senderIban);
         //console.log("sender account id", senderAccountID);
         const receiverAccountID = await  getAccountID(transfer.receiverIban);

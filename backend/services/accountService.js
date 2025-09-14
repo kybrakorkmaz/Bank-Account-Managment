@@ -6,13 +6,12 @@ import client from "../Models/client.js";
 
 function generateRandomTurkishIBAN() {
     const countryCode = "TR";
-    const checkDigits = "00";
-    const bankCode = Math.floor(1000 + Math.random() * 9000).toString();
-    const accountNumber = Array.from({ length: 16 },
-        () => Math.floor(Math.random() * 10)).join("");
-
-    return `${countryCode}${checkDigits}${bankCode}${accountNumber}`;
+    const checkDigits = "00"; // demo için sabit
+    const bankCode = Math.floor(10000 + Math.random() * 90000).toString(); // 5 haneli
+    const accountNumber = Array.from({ length: 16 }, () => Math.floor(Math.random() * 10)).join("");
+    return `${countryCode}${checkDigits}${bankCode}${accountNumber}`; // toplam 26 karakter
 }
+
 
 const createAccount = async (email, accountProp)=>{
     const {accountType, currency, balance} = accountProp;

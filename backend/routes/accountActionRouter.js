@@ -13,13 +13,14 @@ router.post("/transfer", async (req, res) => {
     if (!transferCtx || Object.keys(transferCtx).length === 0) {
         return res.status(400).json({ message: "Empty Request" });
     }
+    console.log(transferCtx);
     try {
         const transferAction = await transferService.sendMoney(clientSession, transferCtx);
 
         if (!transferAction) {
             return res.status(400).json({ message: "Transfer could not be completed. Please check your balance or receiver information." });
         }
-
+        console.log(transferAction);
         return res.status(200).json({ message: "Transfer successfully completed" });
     } catch (error) {
         console.error("Transfer post router error", error);

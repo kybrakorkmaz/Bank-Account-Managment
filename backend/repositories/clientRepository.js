@@ -12,18 +12,19 @@ const getCredentials = async (credentials) => {
         throw error;
     }
 };
-const getClientIdByEmail = async (email)=>{
+const getClientIdByEmail = async (email) => {
     try {
         const result = await dbClient.query(
             'SELECT client_id FROM client WHERE email = $1',
             [email]
         );
-        return result.rows[0]?.client_id || null;
+        return result.rows[0]?.client_id ?? null;
     } catch (error) {
         console.error("Database error", error);
         throw error;
     }
-}
+};
+
 
 
 const getClientInfoByID = async (clientId) => {

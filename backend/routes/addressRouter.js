@@ -36,6 +36,7 @@ router.post("/addresses", async (req, res) => {
             return res.status(400).json({ message: "Empty request body" });
         }
         const newAddress = await addClientAddress(clientSession, addressDetail);
+        console.log(newAddress);
         return res.status(201).json({ message: "New address has been successfully added", address: newAddress });
     } catch (error) {
         console.error("Address creation failed:", error);
@@ -67,11 +68,15 @@ router.patch("/addresses/:id", async (req, res) => {
 
 router.delete("/addresses/:id", async (req, res) => {
     try {
+        const clientSession = req.session.client;
         const addressId = req.params.id;
+        if (!clientSession?.email) {
+            return res.status(401).json({ message: "Unauthorized: No client session" });
+        }
         if (!addressId) {
             return res.status(400).json({ message: "Missing address ID" });
         }
-        const deletedAddress = await removeAddressById(addressId);
+        const deletedAddress = await removeAddressById(addressId, clientSession.email);
         if (!deletedAddress) {
             return res.status(404).json({ message: "Address not found or already deleted" });
         }

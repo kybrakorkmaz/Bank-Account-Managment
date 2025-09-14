@@ -27,26 +27,31 @@ const addClientAddress = async (client, addressDetail) => {
 };
 
 const updateClientAddressById = async (client, addressId, updateFields) => {
-    const allowedFields = ["addressType", "country", "city", "state", "district", "street", "others"];
-    const keys = Object.keys(updateFields).filter(key => allowedFields.includes(key));
-    if (keys.length === 0) throw new Error("No valid fields to update");
+    try{
+        const allowedFields = ["address_type", "country", "city", "state", "district", "street", "others"];
+        const keys = Object.keys(updateFields).filter(key => allowedFields.includes(key));
+        if (keys.length === 0) return ("No valid fields to update"); //404
 
-    const setClause = keys
-        .map((key, i) => `${key === "others" || key === "state" ? key + "_" : key} = $${i + 1}`)
-        .join(", ");
+        const setClause = keys
+            .map((key, i) => `${key === "others" || key === "state" ? key + "_" : key} = $${i + 1}`)
+            .join(", ");
 
-    const values = keys.map(key => updateFields[key]);
-    const query = `UPDATE address SET ${setClause} WHERE address_id = $${keys.length + 1} RETURNING *`;
-    const params = [...values, addressId];
+        const values = keys.map(key => updateFields[key]);
+        const query = `UPDATE address SET ${setClause} WHERE address_id = $${keys.length + 1} RETURNING *`;
+        const params = [...values, addressId];
 
-    const result = await dbClient.query(query, params);
-    return result.rows[0];
+        const result = await dbClient.query(query, params);
+        return result.rows[0];
+    }catch (error){
+        throw error;
+    }
 };
 
-const removeAddressById = async (addressId) => {
+const removeAddressById = async (addressId, email) => {
+    const clientId = await getClientIdByEmail(email);
     const result = await dbClient.query(
-        `DELETE FROM address WHERE address_id = $1 RETURNING *`,
-        [addressId]
+        `DELETE FROM address WHERE address_id = $1 AND client_id = $2 RETURNING *`,
+        [addressId, clientId]
     );
     return result.rows[0];
 };

@@ -414,6 +414,13 @@ a {
 }
 .address-section .address-item{
     width: 100%;
+    border: 1px solid #d9d9d9;
+    border-radius: 6px;
+    background-color: #fafafa;
+}
+.address-item.selected {
+    border-color: #1890ff;
+    background-color: #e6f7ff;
 }
 .address-section .address-item-label-group label{
     margin: 1%;

@@ -1,64 +1,67 @@
-import React from "react";
-import { Table } from "antd";
+import React, {useEffect, useState} from "react";
+import {message, Table} from "antd";
+import axiosInstance from "../api/axiosInstance.js";
+import dayjs from "dayjs";
 
+
+
+const columns = [
+    {
+        title: "Action Type",
+        dataIndex: "action_type",
+        key: "action_type",
+    },
+    {
+        title: "Counterparty IBAN",
+        dataIndex: "counterparty_iban",
+        key: "counterparty_iban",
+    },
+    {
+        title: "Amount",
+        dataIndex: "amount",
+        key: "amount",
+        render: (value) => `${value}₺`,
+    },
+    {
+        title: "Date",
+        dataIndex: "action_time",
+        key: "action_time",
+        render: (value) => dayjs(value).format("DD.MM.YYYY HH:mm"),
+    },
+];
 
 function TransactionLogs() {
-    // TODO: Fetch data from DB
-    const data = [
-        {
-            bankName: "Ziraat Bankası",
-            personName: "Ahmet Yılmaz",
-            personIban: "TR00 0000 0000 0000 0000 0000 00",
-            amount: "1000₺",
-            date: "2019-02-02",
-        },
-        {
-            bankName: "Vakıfbank",
-            personName: "Ayşe Demir",
-            personIban: "TR11 1111 1111 1111 1111 1111 11",
-            amount: "1500₺",
-            date: "2019-02-02",
-        },
-    ];
-    const columns = [
-        {
-            title: 'Bank Name',
-            dataIndex: 'bankName',
-            key: 'bankName',
-        },
-        {
-            title: 'Person Name',
-            dataIndex: 'personName',
-            key: 'personName',
-        },
-        {
-            title: 'IBAN',
-            dataIndex: 'personIban',
-            key: 'personIban',
-        },
-        {
-            title: 'Amount',
-            dataIndex: 'amount',
-            key: 'amount',
-        },
-        {
-            title: 'Date',
-            dataIndex: 'date',
-            key: 'date',
-        },
-    ];
-    const isDataExists = data.length > 0;
+    const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(true);
+    useEffect(() => {
+        const fetchLogs = async () => {
+            try {
+                const response = await axiosInstance.get("/transaction");
+                if (response.status === 200) {
+                    setData(response.data.logs);
+                } else {
+                    message.warning("No transaction found");
+                }
+            } catch (error) {
+                message.error("Failed to fetch transaction logs");
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchLogs();
+    }, []);
     return (
         <>
-            {isDataExists ? (
+            {data.length > 0 ? (
                 <Table
                     dataSource={data}
                     columns={columns}
+                    loading={loading}
+                    rowKey={(record, index) => index}
                     scroll={{ x: "max-content" }}
                 />
-
             ) : (
-                <h5>There is no activity</h5>
+                <h5>No transaction activity</h5>
             )}
         </>
     );

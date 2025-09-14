@@ -43,8 +43,12 @@ class TransferService{
         // create transfer object from the sender's request
         const transfer = this.createTransferObject(transferDetail);
         // IBAN validation
-        const clientIdObj = await getClientIdByEmail(client.email);
-        const clientId = clientIdObj.client_id;
+        const clientId = await getClientIdByEmail(client.email);
+        if (!clientId) {
+            console.error("Client ID not found for email:", client.email);
+            return "Client identity resolution failed";
+        }
+        console.log("Checking IBAN ownership:", clientId, transfer.senderIban);
         const isValidIban = await isIbanBelongsToClient(clientId, transfer.senderIban);
         if (!isValidIban) return "Selected IBAN does not belong to the authenticated user";
         // create transfer total amount variables

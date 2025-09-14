@@ -8,6 +8,7 @@ import accountRouter from "./routes/accountRouter.js";
 import addressRouter from "./routes/addressRouter.js";
 import accountActionRouter from "./routes/accountActionRouter.js";
 import settingsRouter from "./routes/settingsRouter.js";
+import transactionRouter from "./routes/transactionRouter.js";
 
 const port = 3000;
 const app = express();
@@ -31,7 +32,8 @@ app.use("/api/v1/",
     addressRouter,
     accountRouter,
     accountActionRouter,
-    settingsRouter);
+    settingsRouter,
+    transactionRouter);
 
 // DB Connection
 function startDBConnection() {
