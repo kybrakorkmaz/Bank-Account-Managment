@@ -1,7 +1,7 @@
 class TransactionLogs {
-    constructor( transactionType, counterparty_iban, actionTime) {
+    constructor( transactionType, counterpartyIban, actionTime) {
         this.transactionType = transactionType;
-        this.counterparty_iban = counterparty_iban;
+        this.counterpartyIban = counterpartyIban;
         this.actionTime = actionTime;
     }
 }

@@ -59,7 +59,7 @@ function Transfer() {
             return;
         }
         const payload = {
-            transferTypes: dropdownValue,
+            transferType: dropdownValue,
             senderIban: senderIban.toUpperCase(),
             receiverBank: bankName,
             receiverIban: receiverIban.toUpperCase(),

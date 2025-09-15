@@ -1,6 +1,6 @@
 import dbClient from "../config/databaseConfig.js";
 import accountStatus from "../enum/accountStatus.js";
-import Account from "../Models/account.js";
+import Account from "../models/account.js";
 
 const getAccountID = async (clientIban) =>{
     try{

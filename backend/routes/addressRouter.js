@@ -5,6 +5,7 @@ import {
     removeAddressById,
     updateClientAddressById
 } from "../services/addressService.js";
+import addressTypeEnum from "../enum/addressTypeEnum.js";
 
 
 const router = express.Router();
@@ -30,14 +31,28 @@ router.post("/addresses", async (req, res) => {
     if (!clientSession?.email) {
         return res.status(401).json({ message: "Unauthorized: No client session" });
     }
+
     try {
         const addressDetail = req.body;
-        if (!addressDetail) {
+
+        if (!addressDetail || Object.keys(addressDetail).length === 0) {
             return res.status(400).json({ message: "Empty request body" });
         }
+
+        if (!addressDetail.addressType || !addressDetail.country || !addressDetail.city || !addressDetail.street) {
+            return res.status(400).json({ message: "Missing required address fields" });
+        }
+
+        if (!Object.values(addressTypeEnum).includes(addressDetail.addressType)) {
+            return res.status(400).json({ message: `Invalid address type: ${addressDetail.addressType}` });
+        }
+
         const newAddress = await addClientAddress(clientSession, addressDetail);
-        console.log(newAddress);
-        return res.status(201).json({ message: "New address has been successfully added", address: newAddress });
+        return res.status(201).json({
+            message: "New address has been successfully added",
+            address: newAddress
+        });
+
     } catch (error) {
         console.error("Address creation failed:", error);
         return res.status(500).json({ message: "Internal Server Error" });

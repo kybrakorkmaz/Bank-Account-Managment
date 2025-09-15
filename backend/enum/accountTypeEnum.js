@@ -1,7 +1,7 @@
 const accountTypeEnum = {
-    LOAN: "loan", //kredi hesabı
-    TIME_DEPOSIT: "deposit", //vadeli hesap DEPOSIT ACCOUNT
-    CHECKING: "checking"  //vadesiz hesap
+    LOAN: "loan",
+    TIME_DEPOSIT: "deposit",
+    CHECKING: "checking"
 }
 
 export default accountTypeEnum;

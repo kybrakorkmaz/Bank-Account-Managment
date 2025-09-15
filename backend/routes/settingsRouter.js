@@ -10,10 +10,12 @@ const router = express.Router();
 
 router.get("/settings", async (req, res) => {
     const clientSession = req.session.client;
-    const clientId = await getClientIdByEmail(clientSession.email);
     try {
+        const clientId = await getClientIdByEmail(clientSession.email);
+        console.log("router", clientId);
         const settings = await getSettings(clientId);
-        res.json(settings);
+        console.log(settings);
+        return res.status(200).json({message:"success", settings: settings});
     } catch (error) {
         res.status(500).json({ message: "Internal server error" });
     }

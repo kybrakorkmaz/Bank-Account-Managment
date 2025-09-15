@@ -1,4 +1,4 @@
-import transferContext from "../Models/transferContext.js";
+import transferContext from "../models/transferContext.js";
 import {
     checkUserExist,
     getBalanceWithIban,
@@ -41,6 +41,7 @@ class TransferService{
     }
     async sendMoney(client, transferDetail){
         // create transfer object from the sender's request
+        console.log("transferdetail transfer type", transferDetail.transferType);
         const transfer = this.createTransferObject(transferDetail);
         // IBAN validation
         const clientId = await getClientIdByEmail(client.email);
@@ -60,7 +61,7 @@ class TransferService{
         //console.log("Send money function amount value", transfer.amount);
         //console.log("Type of", typeof transfer.amount);
         //check transfer type
-        //console.log("Transfer type", transfer.transferType);
+        console.log("Transfer type", transfer.transferType);
         if(transfer.transferType === transferTypeEnum.TRANSFER ||
             transfer.transferType === transferTypeEnum.VIRMAN){
             const checkReceiver =  await checkUserExist(transfer.receiverIban)
@@ -74,9 +75,9 @@ class TransferService{
         }
         //get currency
         const senderAccountCurr = (await getCurrency(transfer.senderIban)).currency;
-        const receiverAccountCurr = isEFT ? null : (await getCurrency(transfer.receiverIban)).currency ; // null for EFT transaction
+        const receiverAccountCurr = isEFT ? null : await getCurrency(transfer.receiverIban); // null for EFT transaction
         // check currencies
-        //console.log("sender account currency", senderAccountCurr);
+        console.log("sender account currency", senderAccountCurr);
         if(senderAccountCurr !== receiverAccountCurr && !isEFT){
             issuedExchangeFee = (transfer.amount * exchange_fee);
         }

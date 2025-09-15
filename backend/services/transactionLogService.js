@@ -1,4 +1,4 @@
-import TransactionLogs from "../Models/transactionLogs.js";
+import TransactionLogs from "../models/transactionLogs.js";
 import transactionTypeEnum from "../enum/transactionTypeEnum.js";
 import {updateTransactionTable} from "../repositories/accountActionRepository.js";
 import {getAccountID} from "../repositories/accountRespository.js";

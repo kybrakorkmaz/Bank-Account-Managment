@@ -4,7 +4,9 @@ import {getClientInfoByID, updateClientInfoByID} from "../repositories/clientRep
 
 
 const getSettings = async (clientId) => {
-    return await getClientInfoByID(clientId);
+    const result =await getClientInfoByID(clientId);
+    console.log("get settings result", result);
+    return result;
 };
 
 

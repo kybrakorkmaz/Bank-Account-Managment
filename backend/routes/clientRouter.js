@@ -1,5 +1,5 @@
 import express from "express";
-import Client from "../Models/client.js";
+import Client from "../models/client.js";
 import { checkCredentials } from "../services/clientService.js";
 
 const router = express.Router();

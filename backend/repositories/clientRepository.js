@@ -18,19 +18,17 @@ const getClientIdByEmail = async (email) => {
             'SELECT client_id FROM client WHERE email = $1',
             [email]
         );
-        return result.rows[0]?.client_id ?? null;
+        return result.rows[0]?.client_id || null;
     } catch (error) {
         console.error("Database error", error);
         throw error;
     }
 };
 
-
-
 const getClientInfoByID = async (clientId) => {
     try {
         const result = await dbClient.query(
-            `SELECT email, phone_number FROM client WHERE client_id = $1`,
+            `SELECT * FROM client WHERE client_id = $1`,
             [clientId]
         );
         return result.rows[0];

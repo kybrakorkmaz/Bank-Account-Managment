@@ -1,15 +1,16 @@
 import {updateAccountTable} from "../repositories/accountRespository.js";
 import dbClient from "../config/databaseConfig.js";
 import accountStatus from "../enum/accountStatus.js";
-import Account from "../Models/account.js";
-import client from "../Models/client.js";
+import Account from "../models/account.js";
+import client from "../models/client.js";
 
 function generateRandomTurkishIBAN() {
-    const countryCode = "TR";
-    const checkDigits = "00"; // demo için sabit
-    const bankCode = Math.floor(10000 + Math.random() * 90000).toString(); // 5 haneli
-    const accountNumber = Array.from({ length: 16 }, () => Math.floor(Math.random() * 10)).join("");
-    return `${countryCode}${checkDigits}${bankCode}${accountNumber}`; // toplam 26 karakter
+    const countryCode = "TR"; // 2
+    const checkDigits = "00"; // 2
+    const bankCode = Math.floor(10000 + Math.random() * 90000).toString(); // 5
+    const branchCode = Math.floor(Math.random() * 10).toString(); // 1
+    const accountNumber = Array.from({ length: 16 }, () => Math.floor(Math.random() * 10)).join(""); // 16
+    return `${countryCode}${checkDigits}${bankCode}${branchCode}${accountNumber}`; // 26 karakter
 }
 
 

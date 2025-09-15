@@ -4,19 +4,20 @@ import {getAccountID} from "./accountRespository.js";
 const getBalanceWithIban = async(accountIban)=>{
     try{
         const result = await dbClient.query(`SELECT balance FROM account WHERE IBAN=$1`, [accountIban]);
-        return result.rows[0]?.balance; // if not return null
+        console.log("balance", result.rows[0]?.balance);
+        return result.rows[0]?.balance;
     }catch (error){
         console.error("get balance db query error", error);
-        return "something went wrong while processing";
+       throw error;
     }
 }
 const getCurrency= async(accountIban)=>{
     try{
         const result = await dbClient.query(`SELECT currency FROM account WHERE IBAN=$1`, [accountIban]);
-        return result.rows[0];
+        return result.rows[0]?.currency;
     }catch (error){
         console.error("Get currency db query error", error);
-        return "something went wrong while processing";
+       throw error;
     }
 }
 const updateBalanceWithIban = async (accountIban, balance)=>{
@@ -34,7 +35,7 @@ const checkUserExist = async (receiverIban)=>{
         return false; //not exist
     }catch (error){
         console.error("Check user db query error", error);
-        return "Something went wrong while processing";
+        throw  error;
     }
 }
 const updateTransferTable= async (transfer)=>{
@@ -66,6 +67,7 @@ const updateTransferTable= async (transfer)=>{
             transfer.exchangeFee,
             transfer.transferFee,
             transfer.issuedTime];
+
         await dbClient.query(queryParams, [...queryValues]);
     }catch (error){
         console.error("Update transfer table db query error", error);
@@ -79,7 +81,7 @@ const updateTransactionTable= async (accountId, transactionLog)=>{
         VALUES($1, $2, $3, $4)`;
         const queryValues = [
             accountId,
-            transactionLog.counterparty_iban,
+            transactionLog.counterpartyIban,
             transactionLog.transactionType,
             transactionLog.actionTime];
         await dbClient.query(queryParam, [...queryValues]);
