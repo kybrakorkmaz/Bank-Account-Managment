@@ -64,16 +64,19 @@ router.patch("/addresses/:id", async (req, res) => {
     if (!clientSession?.email) {
         return res.status(401).json({ message: "Unauthorized: No client session" });
     }
+
     try {
         const addressId = req.params.id;
         const updateFields = req.body;
         if (!updateFields || Object.keys(updateFields).length === 0) {
             return res.status(400).json({ message: "Empty update request" });
         }
+
         const updatedAddress = await updateClientAddressById(clientSession, addressId, updateFields);
         if (!updatedAddress) {
             return res.status(404).json({ message: "Address not found or not updated" });
         }
+
         return res.status(200).json({ message: "Address updated successfully", address: updatedAddress });
     } catch (error) {
         console.error("Address update failed:", error);
