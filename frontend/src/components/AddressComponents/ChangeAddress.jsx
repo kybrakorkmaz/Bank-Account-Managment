@@ -32,51 +32,68 @@ function ChangeAddress({ address, onBack, onSave }) {
     }, [address]);
 
     const handleSave = async () => {
-        if (!selectedAddressType || !selectedCountry || !selectedCity || !selectedDistrict || !state || !street) {
-            alert("All fields must be filled!");
+        const original = address.fullData;
+        const updatedFields = {};
+
+        const isEmpty = val =>
+            val === null || val === undefined || (typeof val === "string" && val.trim() === "");
+
+        if (!isEmpty(selectedAddressType) && selectedAddressType !== original.address_type) {
+            updatedFields.addressType = selectedAddressType;
+        }
+        if (!isEmpty(selectedCountry) && selectedCountry !== original.country) {
+            updatedFields.country = selectedCountry;
+        }
+        if (!isEmpty(selectedCity) && selectedCity !== original.city) {
+            updatedFields.city = selectedCity;
+        }
+        if (!isEmpty(selectedDistrict) && selectedDistrict !== original.district) {
+            updatedFields.district = selectedDistrict;
+        }
+        if (!isEmpty(state) && state !== original.state_) {
+            updatedFields.state = state;
+        }
+        if (!isEmpty(street) && street !== original.street) {
+            updatedFields.street = street;
+        }
+        if (!isEmpty(others) && others !== original.others_) {
+            updatedFields.others = others;
+        }
+
+        if (Object.keys(updatedFields).length === 0) {
+            message.warning("Boş veya geçersiz değişiklik tespit edildi.");
             return;
         }
 
-        const updatedAddress = {
-            id: address.id,
-            label: selectedAddressType,
-            value: [
-                selectedCountry,
-                selectedCity,
-                state,
-                street,
-                selectedDistrict,
-                others
-            ].filter(Boolean).join(", "),
-            fullData: {
-                addressType: selectedAddressType,
-                country: selectedCountry,
-                city: selectedCity,
-                state: state,
-                district: selectedDistrict,
-                street: street,
-                others: others,
-            }
-        };
-
         try {
-            const response = await axiosInstance.patch(`/addresses/${address.id}`, updatedAddress.fullData);
+            const response = await axiosInstance.patch(`/addresses/${address.id}`, updatedFields);
             if (response.status === 200) {
-                message.success("Address successfully updated!");
-                onSave?.(updatedAddress);
+                message.success("Adres başarıyla güncellendi.");
+
+                const fullData = { ...original, ...updatedFields };
+                const value = [
+                    fullData.country,
+                    fullData.city,
+                    fullData.state_,
+                    fullData.street,
+                    fullData.district,
+                    fullData.others_
+                ].filter(Boolean).join(", ");
+
+                onSave?.({
+                    id: address.id,
+                    label: fullData.address_type,
+                    value,
+                    fullData
+                });
             } else {
-                message.error("Something went wrong!");
+                message.error("Bir hata oluştu.");
             }
         } catch (error) {
-            if (error.response?.status === 400) {
-                message.warning("Empty update request");
-            } else if (error.response?.status === 500) {
-                message.error("Internal server Error");
-            } else {
-                message.error("Unexpected error occurred");
-            }
+            message.error("Sunucu hatası.");
         }
     };
+
     return (
         <div className="address-wrapper">
             <div className="back-button">

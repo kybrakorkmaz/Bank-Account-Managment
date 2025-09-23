@@ -31,7 +31,12 @@ function Login() {
                 email: userEmail,
                 password: userPassword
             });
-            if(response.status === 200) navigate("/profile");
+            if(response.status === 200){
+                const {accessToken, refreshToken}= response.data;
+                localStorage.setItem("accessToken", accessToken);
+                localStorage.setItem("refreshToken", refreshToken);
+                navigate("/profile");
+            }
         }catch (error){
             if(error.response?.status === 404 || error.response?.status === 401) setLoginError(true);
             else console.error("Unexpected error", error);

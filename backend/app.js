@@ -20,11 +20,12 @@ app.use(cors({
 // middleware to read json body
 app.use(express.json());
 
-app.use(session({
+
+/*app.use(session({
     secret: "gizliAnahtar",
     resave: false,
     saveUninitialized: true,
-}));
+}));*/
 
 // binding router
 app.use("/api/v1/",

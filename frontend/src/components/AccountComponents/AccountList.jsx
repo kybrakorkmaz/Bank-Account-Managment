@@ -4,15 +4,15 @@ import CreateAccount from "./CreateAccount.jsx";
 import axiosInstance from "../../api/axiosInstance.js";
 
 function AccountList() {
-    const [accountClicked, setAccountClicked] = React.useState(false);
-    const [accountInfo, setAccountInfo] = React.useState({
+    const [accountClicked, setAccountClicked] = useState(false);
+    const [accountInfo, setAccountInfo] = useState({
             name: "",
             iban: "",
             amount: "",
             currency: ""
         }
     );
-    const [isNewAccount, setIsNewAccount] = React.useState(false);
+    const [isNewAccount, setIsNewAccount] = useState(false);
     const [accountList, setAccountList] = useState([]);
     //update list after created an account
     function handleAccountCreated(newAccount) {
@@ -33,27 +33,28 @@ function AccountList() {
     }, []);
 
     function handleAccountButton(event){
-        const selectedName = event.currentTarget.name;
-        if(selectedName === "Create Account"){
+        const selectedId = Number(event.currentTarget.dataset.id);
+        console.log(selectedId);
+        if (!selectedId) {
             setIsNewAccount(true);
             setAccountClicked(true);
-        }else{
-            const selectedAccount = accountList.find(acc => {
-                if (!acc || !acc.account_type || !acc.currency) return null;
-                const accountType = acc.account_type.charAt(0).toUpperCase() + acc.account_type.slice(1);
-                const accountName = `${acc.currency} ${accountType}`;
-                return accountName === selectedName;
+            return;
+        }
+        const selectedAccount = accountList.find(acc => acc.account_id === selectedId);
+        console.log(selectedAccount);
+        if (selectedAccount) {
+            const accountType = selectedAccount.account_type.charAt(0).toUpperCase() + selectedAccount.account_type.slice(1);
+            const accountName = `${selectedAccount.currency} ${accountType}`;
+            console.log(accountName);
+            setAccountInfo({
+                name: accountName,
+                iban: selectedAccount.iban,
+                amount: selectedAccount.balance,
+                currency: selectedAccount.currency
             });
-            if (selectedAccount) {
-                setAccountInfo({
-                    name: selectedName,
-                    iban: selectedAccount.iban,
-                    amount: selectedAccount.balance,
-                    currency: selectedAccount.currency
-                });
-                setIsNewAccount(false);
-                setAccountClicked(true);
-            }
+            console.log(accountInfo);
+            setIsNewAccount(false);
+            setAccountClicked(true);
         }
 
     }
@@ -76,7 +77,7 @@ function AccountList() {
                             <button
                                 className="account-button"
                                 onClick={handleAccountButton}
-                                name={accountName}
+                                data-id={acc.account_id}
                                 key={acc.account_id}
                             >
                                 {accountName}

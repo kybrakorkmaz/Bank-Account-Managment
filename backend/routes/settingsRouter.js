@@ -5,13 +5,15 @@ import {
     updateSettings
 } from "../services/settingsService.js";
 import {getClientIdByEmail} from "../repositories/clientRepository.js";
+import {verifyToken} from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-router.get("/settings", async (req, res) => {
-    const clientSession = req.session.client;
+router.get("/settings",verifyToken, async (req, res) => {
+    //const clientSession = req.session.client;
+    const clientEmail = req.client?.email;
     try {
-        const clientId = await getClientIdByEmail(clientSession.email);
+        const clientId = await getClientIdByEmail(clientEmail);
         console.log("router", clientId);
         const settings = await getSettings(clientId);
         console.log(settings);
@@ -21,13 +23,14 @@ router.get("/settings", async (req, res) => {
     }
 });
 
-router.patch("/settings", async (req, res) => {
-    const clientSession = req.session.client;
-    if (!clientSession?.email) {
+router.patch("/settings", verifyToken, async (req, res) => {
+    //const clientSession = req.session.client;
+    const clientEmail = req.client?.email;
+    if (!clientEmail ) {
         return res.status(401).json({ message: "Unauthorized: No client session" });
     }
 
-    const clientId = await getClientIdByEmail(clientSession.email);
+    const clientId = await getClientIdByEmail(clientEmail );
     const updateFields = req.body;
 
     if (!updateFields || Object.keys(updateFields).length === 0) {

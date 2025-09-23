@@ -1,13 +1,15 @@
 import express from "express";
 import TransferService from "../services/transferService.js";
+import {verifyToken} from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-router.post("/transfer", async (req, res) => {
-    const clientSession = req.session.client;
+router.post("/transfer", verifyToken, async (req, res) => {
+    const client = req.client; // JWT'den gelen payload
     const transferService = new TransferService();
-    if (!clientSession || !clientSession.email) {
-        return res.status(401).json({ message: "Unauthorized: No client session" });
+
+    if (!client || !client.client_id) {
+        return res.status(401).json({ message: "Unauthorized: Invalid token payload" });
     }
     const transferCtx = req.body;
     if (!transferCtx || Object.keys(transferCtx).length === 0) {
@@ -15,7 +17,7 @@ router.post("/transfer", async (req, res) => {
     }
     console.log(transferCtx);
     try {
-        const transferAction = await transferService.sendMoney(clientSession, transferCtx);
+        const transferAction = await transferService.sendMoney(client, transferCtx);
 
         if (!transferAction) {
             return res.status(400).json({ message: "Transfer could not be completed. Please check your balance or receiver information." });

@@ -6,17 +6,19 @@ import {
     updateClientAddressById
 } from "../services/addressService.js";
 import addressTypeEnum from "../enum/addressTypeEnum.js";
+import {verifyToken} from "../middlewares/authMiddleware.js";
 
 
 const router = express.Router();
 
-router.get("/addresses", async (req, res) => {
-    const clientSession = req.session.client;
-    if (!clientSession?.email) {
+router.get("/addresses", verifyToken, async (req, res) => {
+    //const clientSession = req.session.client;
+    const clientEmail = req.client?.email;
+    if (!clientEmail) {
         return res.status(401).json({ message: "Unauthorized: No client session" });
     }
     try {
-        const addresses = await getClientAddresses(clientSession);
+        const addresses = await getClientAddresses(clientEmail);
         if (!addresses || addresses.length === 0) {
             return res.status(404).json({ message: "No addresses found" });
         }
@@ -26,9 +28,10 @@ router.get("/addresses", async (req, res) => {
     }
 });
 
-router.post("/addresses", async (req, res) => {
-    const clientSession = req.session.client;
-    if (!clientSession?.email) {
+router.post("/addresses", verifyToken, async (req, res) => {
+    //const clientSession = req.session.client;
+    const clientEmail = req.client?.email;
+    if (!clientEmail) {
         return res.status(401).json({ message: "Unauthorized: No client session" });
     }
 
@@ -47,7 +50,7 @@ router.post("/addresses", async (req, res) => {
             return res.status(400).json({ message: `Invalid address type: ${addressDetail.addressType}` });
         }
 
-        const newAddress = await addClientAddress(clientSession, addressDetail);
+        const newAddress = await addClientAddress(clientEmail, addressDetail);
         return res.status(201).json({
             message: "New address has been successfully added",
             address: newAddress
@@ -59,9 +62,10 @@ router.post("/addresses", async (req, res) => {
     }
 });
 
-router.patch("/addresses/:id", async (req, res) => {
-    const clientSession = req.session.client;
-    if (!clientSession?.email) {
+router.patch("/addresses/:id", verifyToken, async (req, res) => {
+    //const clientSession = req.session.client;
+    const clientEmail = req.client?.email;
+    if (!clientEmail) {
         return res.status(401).json({ message: "Unauthorized: No client session" });
     }
 
@@ -72,7 +76,7 @@ router.patch("/addresses/:id", async (req, res) => {
             return res.status(400).json({ message: "Empty update request" });
         }
 
-        const updatedAddress = await updateClientAddressById(clientSession, addressId, updateFields);
+        const updatedAddress = await updateClientAddressById(clientEmail, addressId, updateFields);
         if (!updatedAddress) {
             return res.status(404).json({ message: "Address not found or not updated" });
         }
@@ -84,17 +88,18 @@ router.patch("/addresses/:id", async (req, res) => {
     }
 });
 
-router.delete("/addresses/:id", async (req, res) => {
+router.delete("/addresses/:id", verifyToken, async (req, res) => {
     try {
-        const clientSession = req.session.client;
+        //const clientSession = req.session.client;
+        const clientEmail = req.client?.email;
         const addressId = req.params.id;
-        if (!clientSession?.email) {
+        if (!clientEmail) {
             return res.status(401).json({ message: "Unauthorized: No client session" });
         }
         if (!addressId) {
             return res.status(400).json({ message: "Missing address ID" });
         }
-        const deletedAddress = await removeAddressById(addressId, clientSession.email);
+        const deletedAddress = await removeAddressById(addressId, clientEmail);
         if (!deletedAddress) {
             return res.status(404).json({ message: "Address not found or already deleted" });
         }

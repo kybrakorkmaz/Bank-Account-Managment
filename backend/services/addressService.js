@@ -8,14 +8,14 @@ import {
     updateAddressById
 } from "../repositories/addressRepository.js";
 
-const getClientAddresses = async (client) => {
-    const clientId = await getClientIdByEmail(client.email);
+const getClientAddresses = async (clientEmail) => {
+    const clientId = await getClientIdByEmail(clientEmail);
     if (!clientId) return [];
     return await findAddressesByClientId(clientId);
 };
 
-const addClientAddress = async (client, addressDetail) => {
-    const clientId = await getClientIdByEmail(client.email);
+const addClientAddress = async (clientEmail, addressDetail) => {
+    const clientId = await getClientIdByEmail(clientEmail);
     if (!clientId) throw new Error("Client not found");
 
     const addressObj = new Address(
@@ -31,8 +31,8 @@ const addClientAddress = async (client, addressDetail) => {
     return await insertAddressForClient(clientId, addressObj);
 };
 
-const updateClientAddressById = async (client, addressId, updateFields) => {
-    const clientId = await getClientIdByEmail(client.email);
+const updateClientAddressById = async (clientEmail, addressId, updateFields) => {
+    const clientId = await getClientIdByEmail(clientEmail);
     if (!clientId) throw new Error("Client not found");
 
     const normalizeKeys = {

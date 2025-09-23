@@ -77,4 +77,4 @@ const updateClientInfoByID = async (clientId, email, phone, password) => {
     }
 };
 
-export {getCredentials, getClientIdByEmail,getClientInfoByID, updateClientInfoByID};
+export {getCredentials,getClientIdByEmail, getClientInfoByID, updateClientInfoByID};

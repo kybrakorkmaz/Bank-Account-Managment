@@ -1,16 +1,18 @@
 import express from "express";
 import { deleteAccount, getAccountList, getMainAccount} from "../repositories/accountRespository.js";
 import {createAccount} from "../services/accountService.js";
+import {verifyToken} from "../middlewares/authMiddleware.js";
 const router = express.Router();
 
-router.get("/accounts/main", async (req, res) => {
-    const clientSession = req.session.client;
-    if (!clientSession?.email) {
+router.get("/accounts/main",verifyToken, async (req, res) => {
+    //const clientSession = req.session.client;
+    const clientEmail = req.client?.email;
+    if (!clientEmail) {
         return res.status(401).json({ message: "Unauthorized: No client session" });
     }
 
     try {
-        const mainAccount = await getMainAccount(clientSession.email);
+        const mainAccount = await getMainAccount(clientEmail);
         if (!mainAccount) {
             return res.status(404).json({ message: "No deposit account found" });
         }
@@ -22,13 +24,14 @@ router.get("/accounts/main", async (req, res) => {
 });
 
 
-router.get("/accounts", async (req, res)=>{
-    const clientSession = req.session.client;
-    if(!clientSession || !clientSession.email){
+router.get("/accounts", verifyToken, async (req, res)=>{
+    //const clientSession = req.session.client;
+    const clientEmail = req.client?.email;
+    if(!clientEmail){
         return res.status(401).json({ message: "Unauthorized: No client session" });
     }
     try{
-        const accountList = await getAccountList(clientSession);
+        const accountList = await getAccountList({ email: clientEmail });
         if(!accountList || accountList.length === 0){
             return res.status(404).json({ message: "No Account Found" });
         }
@@ -38,9 +41,10 @@ router.get("/accounts", async (req, res)=>{
     }
 });
 
-router.post("/accounts", async (req, res)=>{
-   const clientSession = req.session.client;
-   if(!clientSession || !clientSession.email){
+router.post("/accounts", verifyToken, async (req, res)=>{
+   //const clientSession = req.session.client;
+    const clientEmail = req.client?.email;
+   if(!clientEmail){
        return res.status(401).json({ message: "Unauthorized: No client session" });
    }
    const result = req.body;
@@ -50,7 +54,7 @@ router.post("/accounts", async (req, res)=>{
         return res.status(400).json({ message: "Empty Request" });
     }
    try{
-       const newAccount = await createAccount(clientSession.email, result);
+       const newAccount = await createAccount(clientEmail, result);
        return res.status(201).json({ message: "Account created", account: newAccount });
    }catch (error){
        console.error("Account creation failed:", error);
@@ -58,11 +62,12 @@ router.post("/accounts", async (req, res)=>{
    }
 });
 
-router.delete("/accounts/:id", async (req, res) => {
+router.delete("/accounts/:id", verifyToken, async (req, res) => {
     const accountId = req.params.id;
 
-    const clientSession = req.session.client;
-    if (!clientSession || !clientSession.email) {
+    //const clientSession = req.session.client;
+    const clientEmail = req.client?.email;
+    if (!clientEmail) {
         return res.status(401).json({ message: "Unauthorized: No client session" });
     }
 

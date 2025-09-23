@@ -8,15 +8,26 @@ import {
     SettingOutlined,
     UserOutlined, LogoutOutlined, EnvironmentOutlined
 } from "@ant-design/icons";
-import { Link, Outlet } from "react-router-dom";
+import {Link, Outlet, useNavigate} from "react-router-dom";
 const { Header, Sider, Content } = Layout;
 
 function Profile() {
     const [collapsed, setCollapsed] = useState(false);
+    const navigate = useNavigate();
     function toggleCollapsed() {
         setCollapsed(!collapsed);
     }
-    function handleLogout() {}
+    function handleLogout() {
+        // Tokenları temizle
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+
+        // oturum verileri temizlenmesi
+        // localStorage.clear();
+
+        // Anasayfaya yönlendir
+        navigate("/");
+    }
 
     return (
         <Layout style={{ minHeight: "100vh" }}>
