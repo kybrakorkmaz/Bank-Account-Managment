@@ -3,8 +3,8 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import {findValidToken, revokeToken, storeToken} from "../repositories/authRepository.js";
 
-const JWT_SECRET = "dev-access-secret";
-const JWT_REFRESH_SECRET = "dev-refresh-secret";
+const JWT_SECRET = process.env.JWT_ACCESS_SECRET;
+const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET;
 
 const checkCredentials = async (credentials) => {
     const result = await getCredentials(credentials);
@@ -29,11 +29,11 @@ const loginClient = async(credentials)=>{
         email: result.email
     };
     const accessToken = jwt.sign(payload, JWT_SECRET, {
-        expiresIn: "15m",
+        expiresIn: process.env.ACCESS_TOKEN_EXPIRES_IN,
         issuer: "dev-app"
     });
     const refreshToken = jwt.sign(payload, JWT_REFRESH_SECRET, {
-        expiresIn: "7d",
+        expiresIn: process.env.REFRESH_TOKEN_EXPIRES_IN,
         issuer: "dev-app"
     });
 
@@ -48,7 +48,7 @@ const refreshAccessToken = async (refreshToken)=>{
         if(!tokenRecord || tokenRecord.revoked) return {success: false,  reason: "INVALID_TOKEN"};
         const payload = {client_id: decoded.client_id, email: decoded.email};
         const newAccessToken = jwt.sign(payload, JWT_SECRET, {
-            expiresIn: "15m",
+            expiresIn: process.env.ACCESS_TOKEN_EXPIRES_IN,
             issuer: "dev-app"
         });
         return {success: true, accessToken: newAccessToken};

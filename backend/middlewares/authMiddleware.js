@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 
-const JWT_SECRET = "dev-access-secret";
+const JWT_SECRET = process.env.JWT_ACCESS_SECRET;
 const verifyToken = async (req, res, next)=>{
     const authHeader = req.headers.authorization;
     if(!authHeader?.startsWith("Bearer ")){

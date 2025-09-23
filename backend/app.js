@@ -1,6 +1,10 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import express from "express";
 import session from "express-session";
 import cors from "cors";
+
 
 import dbClient from "./config/databaseConfig.js";
 import clientRouter from "./routes/clientRouter.js";
@@ -10,10 +14,10 @@ import accountActionRouter from "./routes/accountActionRouter.js";
 import settingsRouter from "./routes/settingsRouter.js";
 import transactionRouter from "./routes/transactionRouter.js";
 
-const port = 3000;
+const port = process.env.PORT;
 const app = express();
 app.use(cors({
-    origin: "http://localhost:5173", //frontend address
+    origin: process.env.FRONTEND_ORIGIN, //frontend address
     credentials: true
 }));
 
@@ -53,3 +57,5 @@ startDBConnection();
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
 });
+console.log("DB_USER:", process.env.DB_USER);
+console.log("DB_PASSWORD:", process.env.DB_PASSWORD);
