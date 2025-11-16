@@ -20,5 +20,5 @@ This is a full-stack web application that simulates core banking operations. Use
 - Modular backend architecture (Controller → Service → Repository)
 
 ## Notes
-I created a medium series for the project if you want to more details please check this [link](https://medium.com/@kybra9125/bank-account-management-system-i-254cc18a9879) in English, for Turkick click this [link](https://medium.com/@kybra9125/banka-hesab%C4%B1-y%C3%B6netim-sistemi-i-2d23a4d37054).
+I created a medium series for the project if you want to more details please check this [link](https://medium.com/@kybra9125/bank-account-management-system-i-254cc18a9879) in English, for Turkish click this [link](https://medium.com/@kybra9125/banka-hesab%C4%B1-y%C3%B6netim-sistemi-i-2d23a4d37054).
 
