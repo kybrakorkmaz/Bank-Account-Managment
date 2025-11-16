@@ -18,7 +18,7 @@ This is a full-stack web application that simulates core banking operations. Use
 - Transaction logging and history retrieval  
 - User settings and password update  
 - Modular backend architecture (Controller → Service → Repository)
-- 
-## NOTE
-This README is a preliminary version and will be revised upon project completion to include full documentation, API references, deployment instructions, and architectural decisions.
+
+## Notes
+I created a medium series for the project if you want to more details please check this [link](https://medium.com/@kybra9125/bank-account-management-system-i-254cc18a9879) in English, for Turkick click this [link](https://medium.com/@kybra9125/banka-hesab%C4%B1-y%C3%B6netim-sistemi-i-2d23a4d37054).
 

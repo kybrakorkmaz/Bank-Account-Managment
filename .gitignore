@@ -42,7 +42,7 @@ build/
 .stylelintcache
 
 # dotenv files (ortam değişkenleri)
-.env
+backend/.env
 .env.*
 !.env.example
 
